@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CoachingRouteImport } from './routes/coaching'
 import { Route as MotivationRouteImport } from './routes/motivation'
+import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as ProgramsIndexRouteImport } from './routes/programs.index'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
@@ -50,6 +51,11 @@ const MotivationRoute = MotivationRouteImport.update({
   path: '/motivation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/motivation': typeof MotivationRoute
+  '/chat': typeof AuthenticatedChatRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/shop/$slug': typeof ShopSlugRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/motivation': typeof MotivationRoute
+  '/chat': typeof AuthenticatedChatRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/shop/$slug': typeof ShopSlugRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/motivation': typeof MotivationRoute
+  '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/shop/$slug': typeof ShopSlugRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/motivation'
+    | '/chat'
     | '/profile'
     | '/programs/$slug'
     | '/shop/$slug'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/motivation'
+    | '/chat'
     | '/profile'
     | '/programs/$slug'
     | '/shop/$slug'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/motivation'
+    | '/_authenticated/chat'
     | '/_authenticated/profile'
     | '/programs/$slug'
     | '/shop/$slug'
@@ -211,6 +223,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MotivationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/chat': {
+      id: '/_authenticated/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof AuthenticatedChatRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -250,10 +269,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
 }
 
@@ -275,13 +296,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
