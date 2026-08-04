@@ -6,6 +6,12 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
+type Goal = "mass" | "cut" | "strength" | "endurance";
+type Level = "beginner" | "intermediate" | "advanced";
+
+const GOALS: Goal[] = ["mass", "cut", "strength", "endurance"];
+const LEVELS: Level[] = ["beginner", "intermediate", "advanced"];
+
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
@@ -25,18 +31,30 @@ export const Route = createFileRoute("/_authenticated/profile")({
 const statSchema = z.object({
   weight_kg: z.number().min(20).max(400),
   body_fat_pct: z.number().min(1).max(70).nullable(),
-  notes: z.string().max(500),
+  waist_cm: z.number().min(30).max(250).nullable(),
+  arm_cm: z.number().min(15).max(100).nullable(),
+  note: z.string().max(500),
 });
+
+const numOrNull = (v: string) => (v.trim() === "" ? null : Number(v));
 
 function ProfilePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const [fullName, setFullName] = useState("");
-  const [goal, setGoal] = useState("");
+
+  const [displayName, setDisplayName] = useState("");
+  const [bio, setBio] = useState("");
+  const [age, setAge] = useState("");
+  const [height, setHeight] = useState("");
+  const [goal, setGoal] = useState<Goal>("mass");
+  const [experience, setExperience] = useState<Level>("beginner");
+
   const [weight, setWeight] = useState("");
   const [bodyFat, setBodyFat] = useState("");
-  const [notes, setNotes] = useState("");
+  const [waist, setWaist] = useState("");
+  const [arm, setArm] = useState("");
+  const [note, setNote] = useState("");
 
   const profile = useQuery({
     queryKey: ["profile", user?.id],
@@ -59,7 +77,7 @@ function ProfilePage() {
       const { data, error } = await supabase
         .from("body_stats")
         .select("*")
-        .order("recorded_at", { ascending: false })
+        .order("logged_on", { ascending: false })
         .limit(20);
       if (error) throw error;
       return data;
@@ -67,10 +85,14 @@ function ProfilePage() {
   });
 
   useEffect(() => {
-    if (profile.data) {
-      setFullName(profile.data.full_name ?? "");
-      setGoal(profile.data.goal ?? "");
-    }
+    const p = profile.data;
+    if (!p) return;
+    setDisplayName(p.display_name ?? "");
+    setBio(p.bio ?? "");
+    setAge(p.age ? String(p.age) : "");
+    setHeight(p.height_cm ? String(p.height_cm) : "");
+    if (p.goal) setGoal(p.goal);
+    if (p.experience) setExperience(p.experience);
   }, [profile.data]);
 
   async function saveProfile(e: React.FormEvent) {
@@ -78,7 +100,14 @@ function ProfilePage() {
     if (!user) return;
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: fullName.trim().slice(0, 100), goal: goal.trim().slice(0, 200) })
+      .update({
+        display_name: displayName.trim().slice(0, 100) || null,
+        bio: bio.trim().slice(0, 500) || null,
+        age: age ? Math.min(100, Math.max(12, Number(age))) : null,
+        height_cm: height ? Math.min(250, Math.max(100, Number(height))) : null,
+        goal,
+        experience,
+      })
       .eq("id", user.id);
     if (error) {
       toast.error(error.message);
@@ -93,8 +122,10 @@ function ProfilePage() {
     if (!user) return;
     const parsed = statSchema.safeParse({
       weight_kg: Number(weight),
-      body_fat_pct: bodyFat ? Number(bodyFat) : null,
-      notes: notes.trim(),
+      body_fat_pct: numOrNull(bodyFat),
+      waist_cm: numOrNull(waist),
+      arm_cm: numOrNull(arm),
+      note: note.trim(),
     });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Check your numbers");
@@ -104,7 +135,9 @@ function ProfilePage() {
       user_id: user.id,
       weight_kg: parsed.data.weight_kg,
       body_fat_pct: parsed.data.body_fat_pct,
-      notes: parsed.data.notes || null,
+      waist_cm: parsed.data.waist_cm,
+      arm_cm: parsed.data.arm_cm,
+      note: parsed.data.note || null,
     });
     if (error) {
       toast.error(error.message);
@@ -112,7 +145,9 @@ function ProfilePage() {
     }
     setWeight("");
     setBodyFat("");
-    setNotes("");
+    setWaist("");
+    setArm("");
+    setNote("");
     toast.success("Entry logged");
     qc.invalidateQueries({ queryKey: ["body_stats", user.id] });
   }
@@ -123,6 +158,10 @@ function ProfilePage() {
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
   }
+
+  const field =
+    "mt-2 h-12 w-full rounded-sm border border-border bg-background px-4 outline-none focus:border-gold";
+  const label = "block font-display text-xs uppercase tracking-widest";
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
@@ -143,27 +182,94 @@ function ProfilePage() {
         <form onSubmit={saveProfile} className="rounded-sm border border-border bg-card p-6">
           <h2 className="text-2xl">Personal information</h2>
           <p className="mt-2 text-sm text-muted-foreground">{user?.email}</p>
-          <label htmlFor="fullName" className="mt-6 block font-display text-xs uppercase tracking-widest">
-            Full name
+
+          <label htmlFor="displayName" className={`${label} mt-6`}>
+            Display name
           </label>
           <input
-            id="fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            id="displayName"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
             maxLength={100}
-            className="mt-2 h-12 w-full rounded-sm border border-border bg-background px-4 outline-none focus:border-gold"
+            className={field}
           />
-          <label htmlFor="goal" className="mt-4 block font-display text-xs uppercase tracking-widest">
-            Current goal
+
+          <div className="mt-4 grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="age" className={label}>
+                Age
+              </label>
+              <input
+                id="age"
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                className={field}
+              />
+            </div>
+            <div>
+              <label htmlFor="height" className={label}>
+                Height (cm)
+              </label>
+              <input
+                id="height"
+                type="number"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+                className={field}
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="goal" className={label}>
+                Goal
+              </label>
+              <select
+                id="goal"
+                value={goal}
+                onChange={(e) => setGoal(e.target.value as Goal)}
+                className={field}
+              >
+                {GOALS.map((g) => (
+                  <option key={g} value={g}>
+                    {g}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="experience" className={label}>
+                Experience
+              </label>
+              <select
+                id="experience"
+                value={experience}
+                onChange={(e) => setExperience(e.target.value as Level)}
+                className={field}
+              >
+                {LEVELS.map((l) => (
+                  <option key={l} value={l}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <label htmlFor="bio" className={`${label} mt-4`}>
+            About you
           </label>
-          <input
-            id="goal"
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
-            maxLength={200}
-            placeholder="Build 5kg of lean mass by summer"
-            className="mt-2 h-12 w-full rounded-sm border border-border bg-background px-4 outline-none focus:border-gold"
+          <textarea
+            id="bio"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            maxLength={500}
+            rows={3}
+            className="mt-2 w-full rounded-sm border border-border bg-background p-4 outline-none focus:border-gold"
           />
+
           <button className="mt-6 h-12 w-full rounded-sm bg-gold font-display text-sm font-bold uppercase tracking-widest text-primary-foreground hover:opacity-90">
             Save profile
           </button>
@@ -173,7 +279,7 @@ function ProfilePage() {
           <h2 className="text-2xl">Log body stats</h2>
           <div className="mt-6 grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="weight" className="block font-display text-xs uppercase tracking-widest">
+              <label htmlFor="weight" className={label}>
                 Weight (kg)
               </label>
               <input
@@ -183,11 +289,11 @@ function ProfilePage() {
                 required
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
-                className="mt-2 h-12 w-full rounded-sm border border-border bg-background px-4 outline-none focus:border-gold"
+                className={field}
               />
             </div>
             <div>
-              <label htmlFor="bf" className="block font-display text-xs uppercase tracking-widest">
+              <label htmlFor="bf" className={label}>
                 Body fat %
               </label>
               <input
@@ -196,17 +302,43 @@ function ProfilePage() {
                 step="0.1"
                 value={bodyFat}
                 onChange={(e) => setBodyFat(e.target.value)}
-                className="mt-2 h-12 w-full rounded-sm border border-border bg-background px-4 outline-none focus:border-gold"
+                className={field}
+              />
+            </div>
+            <div>
+              <label htmlFor="waist" className={label}>
+                Waist (cm)
+              </label>
+              <input
+                id="waist"
+                type="number"
+                step="0.1"
+                value={waist}
+                onChange={(e) => setWaist(e.target.value)}
+                className={field}
+              />
+            </div>
+            <div>
+              <label htmlFor="arm" className={label}>
+                Arm (cm)
+              </label>
+              <input
+                id="arm"
+                type="number"
+                step="0.1"
+                value={arm}
+                onChange={(e) => setArm(e.target.value)}
+                className={field}
               />
             </div>
           </div>
-          <label htmlFor="notes" className="mt-4 block font-display text-xs uppercase tracking-widest">
-            Notes
+          <label htmlFor="note" className={`${label} mt-4`}>
+            Note
           </label>
           <textarea
-            id="notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            id="note"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
             maxLength={500}
             rows={3}
             className="mt-2 w-full rounded-sm border border-border bg-background p-4 outline-none focus:border-gold"
@@ -226,21 +358,23 @@ function ProfilePage() {
                 <th className="p-4">Date</th>
                 <th className="p-4">Weight</th>
                 <th className="p-4">Body fat</th>
-                <th className="p-4">Notes</th>
+                <th className="p-4">Waist</th>
+                <th className="p-4">Note</th>
               </tr>
             </thead>
             <tbody>
               {(stats.data ?? []).map((s) => (
                 <tr key={s.id} className="border-b border-border last:border-0">
-                  <td className="p-4">{new Date(s.recorded_at).toLocaleDateString()}</td>
-                  <td className="p-4">{s.weight_kg} kg</td>
+                  <td className="p-4">{new Date(s.logged_on).toLocaleDateString()}</td>
+                  <td className="p-4">{s.weight_kg ? `${s.weight_kg} kg` : "—"}</td>
                   <td className="p-4">{s.body_fat_pct ? `${s.body_fat_pct}%` : "—"}</td>
-                  <td className="p-4 text-muted-foreground">{s.notes ?? "—"}</td>
+                  <td className="p-4">{s.waist_cm ? `${s.waist_cm} cm` : "—"}</td>
+                  <td className="p-4 text-muted-foreground">{s.note ?? "—"}</td>
                 </tr>
               ))}
               {(stats.data ?? []).length === 0 && (
                 <tr>
-                  <td colSpan={4} className="p-6 text-center text-muted-foreground">
+                  <td colSpan={5} className="p-6 text-center text-muted-foreground">
                     No entries yet — log your first weigh-in above.
                   </td>
                 </tr>
@@ -250,7 +384,10 @@ function ProfilePage() {
         </div>
       </section>
 
-      <Link to="/chat" className="mt-8 inline-block font-display text-sm uppercase tracking-widest text-gold">
+      <Link
+        to="/chat"
+        className="mt-8 inline-block font-display text-sm uppercase tracking-widest text-gold"
+      >
         Message your coach →
       </Link>
     </div>
