@@ -1,24 +1,48 @@
-# Shop product photos + training videos
+# Product photo galleries in the shop
 
-## Photos in the shop
+Each of the 15 shop products gets its own set of photos, shown as a clean gallery: one large main image with a row of small thumbnails underneath on the product page, and a single lead photo on the shop grid cards.
 
-Every product gets its own image, shown on the shop grid cards and large on the product detail page.
+## What you'll see
 
-- Add an `image_url` column to the products table and fill it for each seeded product.
-- Generate one photo per product in the charcoal/gold studio look (rack, cable station, barbell + bumper plates, dumbbells, rings, parallettes, pull-up bar, belt, chalk, shaker/supplements) so the catalogue looks like one shoot, not stock.
-- Shop grid: image on top of each card (4:3, hover zoom), price and Add button below.
-- Product detail: full-width hero image beside the name, price and Add to cart block.
-- Fallback: any product without a photo shows a gold monogram tile instead of a broken image.
+**Shop grid** — every product card gains a photo at the top (4:3 crop, gold hover treatment consistent with the current cards). Category label, name, price and the Add button stay where they are.
 
-## Training videos
+**Product page** — a two-column layout on desktop:
 
-- Home page: a short looping training clip behind/next to the hero, muted and autoplaying, with the existing hero image as its poster so nothing flashes on load.
-- Program detail pages: a technique clip at the top of the program (gym, home-equipment, and calisthenics each get their own clip matched to the training style), with poster image and standard play controls.
-- Videos are generated 1080p, a few seconds, no sound, and served from CDN asset storage so the repo stays light.
+```text
++---------------------------+   Category
+|                           |   PRODUCT NAME
+|        main photo         |   ----------------
+|                           |   description
++---------------------------+   price · stock
+| [t1] [t2] [t3]            |   [ Add to cart ]
++---------------------------+
+```
+
+Clicking a thumbnail swaps the main photo. The active thumbnail carries a gold border. On mobile the gallery stacks above the product details. Photos have proper alt text ("Power Rack Pro — front view") for SEO and screen readers.
+
+## The photos
+
+Three generated photos per product, all in the same charcoal-and-gold studio look so the shop reads as one catalogue:
+
+1. Full product, straight-on hero shot
+2. Angled or detail shot (knurling, welds, strap texture, label)
+3. In-context shot (in a gym setting or in use)
+
+That's 45 images total, generated at 1024x768 and saved as JPGs.
 
 ## Technical notes
 
-- Migration adds `image_url text` to `public.products` and updates the seeded rows; public read policy already covers it.
-- Generated images and videos are uploaded as CDN assets (`.asset.json` pointers) and referenced by URL.
-- Video elements use `muted`, `playsInline`, `preload="none"` with `poster`, so mobile does not download the clip until needed.
-- `og:image` on the shop product route is set to the product's absolute image URL.
+- Migration: add an `images text[]` column to `public.products` (nullable, default `'{}'`). Public read policy already covers it; no new grants needed.
+- Images are generated into `src/assets/products/<slug>-1.jpg` etc., then externalised to the CDN with `lovable-assets` so the repo stays light. The resulting `.asset.json` URLs are what gets written into the `images` column via the insert tool.
+- `src/lib/public-content.functions.ts` needs no change — it already selects `*`, so `images` flows through once the column exists. The generated `types.ts` picks the column up after the migration.
+- `src/routes/shop.index.tsx`: render `product.images?.[0]` in each card, with a neutral placeholder block when the array is empty.
+- `src/routes/shop.$slug.tsx`: new `ProductGallery` component (local to the route file or `src/components/shop/product-gallery.tsx`) holding the selected index in `useState`; main image `loading="eager"`, thumbnails `loading="lazy"`.
+- Add the first image as `og:image` / `twitter:image` in the product route's `head()` using the absolute CDN URL.
+
+## Build order
+
+1. Migration for the `images` column
+2. Generate the 45 photos, upload to CDN
+3. Write the image URLs into the products table
+4. Gallery component + product page layout
+5. Shop grid card images
