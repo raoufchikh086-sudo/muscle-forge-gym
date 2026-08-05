@@ -8,7 +8,7 @@ type Env = "all" | "gym" | "home_equipment" | "calisthenics";
 type Level = "all" | "beginner" | "intermediate" | "advanced";
 type Goal = "all" | "mass" | "strength" | "cut" | "endurance";
 
-type Search = { env: Env; level: Level; goal: Goal };
+type Search = { env?: Env; level?: Level; goal?: Goal };
 
 const envLabels: Record<Exclude<Env, "all">, string> = {
   gym: "Gym",
@@ -85,14 +85,18 @@ function ProgramsPage() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
 
+  const env = search.env ?? "all";
+  const level = search.level ?? "all";
+  const goal = search.goal ?? "all";
+
   const filtered = programs.filter(
     (p) =>
-      (search.env === "all" || p.environment === search.env) &&
-      (search.level === "all" || p.level === search.level) &&
-      (search.goal === "all" || p.goal === search.goal),
+      (env === "all" || p.environment === env) &&
+      (level === "all" || p.level === level) &&
+      (goal === "all" || p.goal === goal),
   );
 
-  const update = (patch: Partial<Search>) =>
+  const update = (patch: Search) =>
     navigate({ search: (prev: Search) => ({ ...prev, ...patch }) });
 
   return (
