@@ -111,7 +111,7 @@ function ProgramsPage() {
       <div className="mt-10 flex flex-col gap-4 rounded-sm border border-border bg-card p-6">
         <FilterRow
           label="Where"
-          value={search.env}
+          value={env}
           onChange={(env) => update({ env })}
           options={[
             { value: "all", label: "All" },
@@ -122,7 +122,7 @@ function ProgramsPage() {
         />
         <FilterRow
           label="Level"
-          value={search.level}
+          value={level}
           onChange={(level) => update({ level })}
           options={[
             { value: "all", label: "All" },
@@ -133,7 +133,7 @@ function ProgramsPage() {
         />
         <FilterRow
           label="Goal"
-          value={search.goal}
+          value={goal}
           onChange={(goal) => update({ goal })}
           options={[
             { value: "all", label: "All" },
