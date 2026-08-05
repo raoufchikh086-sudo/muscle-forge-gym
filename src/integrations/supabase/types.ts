@@ -192,6 +192,7 @@ export type Database = {
           description: string
           id: string
           image_key: string | null
+          images: string[]
           in_stock: boolean
           name: string
           price_cents: number
@@ -204,6 +205,7 @@ export type Database = {
           description: string
           id?: string
           image_key?: string | null
+          images?: string[]
           in_stock?: boolean
           name: string
           price_cents: number
@@ -216,6 +218,7 @@ export type Database = {
           description?: string
           id?: string
           image_key?: string | null
+          images?: string[]
           in_stock?: boolean
           name?: string
           price_cents?: number
