@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { listProducts } from "@/lib/public-content.functions";
 import { formatPrice, useCart } from "@/hooks/use-cart";
+import { productImages } from "@/lib/product-images";
 
 const productsQuery = queryOptions({ queryKey: ["products"], queryFn: () => listProducts() });
 
@@ -121,8 +122,10 @@ function ShopPage() {
                 Add
               </button>
             </div>
+            </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
