@@ -69,11 +69,30 @@ function ShopPage() {
       </div>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((p) => (
+        {filtered.map((p) => {
+          const images = productImages(p.slug);
+          return (
           <article
             key={p.id}
-            className="flex flex-col rounded-sm border border-border bg-card p-6 transition-colors hover:border-gold"
+            className="flex flex-col overflow-hidden rounded-sm border border-border bg-card transition-colors hover:border-gold"
           >
+            <Link
+              to="/shop/$slug"
+              params={{ slug: p.slug }}
+              className="block aspect-[4/3] overflow-hidden bg-muted"
+            >
+              {images[0] ? (
+                <img
+                  src={images[0]}
+                  alt={p.name}
+                  loading="lazy"
+                  width={1024}
+                  height={768}
+                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+              ) : null}
+            </Link>
+            <div className="flex flex-1 flex-col p-6">
             <span className="font-display text-[10px] uppercase tracking-[0.3em] text-gold">
               {p.category}
             </span>
