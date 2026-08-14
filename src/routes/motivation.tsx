@@ -28,9 +28,17 @@ export const Route = createFileRoute("/motivation")({
 const principles = {
   "David Goggins": {
     icon: Flame,
+    initials: "DG",
     role: "Ultra-endurance athlete, retired Navy SEAL",
+    theme: "light" as const,
     intro:
       "Goggins built himself out of nothing: 300 pounds and broken, to Hell Week three times and 4,030 pull-ups in 17 hours. His whole method is doing the thing you least want to do, on purpose, every day.",
+    facts: [
+      ["297 lb → 191 lb", "in under three months"],
+      ["3×", "Navy SEAL Hell Week"],
+      ["4,030", "pull-ups in 17 hours"],
+      ["100+ miles", "ultra races on broken feet"],
+    ],
     rules: [
       "The 40% rule — when your mind says stop, you have 60% left.",
       "Callus the mind: seek the task you are avoiding and start there.",
@@ -40,9 +48,17 @@ const principles = {
   },
   "Khabib Nurmagomedov": {
     icon: Mountain,
+    initials: "KN",
     role: "Undefeated 29-0 UFC lightweight champion",
+    theme: "dark" as const,
     intro:
       "Khabib trained in the mountains of Dagestan, wrestled a bear cub as a boy and retired without a single loss. His edge was never talent — it was relentless preparation and total discipline.",
+    facts: [
+      ["29–0", "professional record"],
+      ["Dagestan", "mountain training camps"],
+      ["UFC 229", "biggest PPV in history"],
+      ["Retired", "undefeated, on his word"],
+    ],
     rules: [
       "Out-prepare everyone: the fight is decided in the camp, not the cage.",
       "Pressure without pause — keep coming forward until they break.",
@@ -75,43 +91,108 @@ function MotivationPage() {
       {(Object.keys(principles) as (keyof typeof principles)[]).map((author) => {
         const p = principles[author];
         const list = quotes.filter((q) => q.author === author);
+        const light = p.theme === "light";
         return (
-          <section key={author} className="border-b border-border">
+          <section
+            key={author}
+            className={
+              light
+                ? "bg-surface-light text-surface-light-foreground"
+                : "border-y border-border bg-background"
+            }
+          >
             <div className="mx-auto max-w-6xl px-4 py-20">
-              <div className="flex items-center gap-4">
-                <p.icon className="h-8 w-8 text-gold" />
-                <div>
-                  <h2 className="text-3xl md:text-4xl">{author}</h2>
-                  <p className="font-display text-[11px] uppercase tracking-[0.3em] text-gold">
-                    {p.role}
-                  </p>
+              <div className="grid gap-10 lg:grid-cols-[280px_1fr] lg:items-start">
+                <div
+                  className={`relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-sm border p-6 ${
+                    light ? "border-surface-light-border bg-white" : "border-border bg-card"
+                  }`}
+                >
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 flex items-center justify-center font-display text-[9rem] font-bold leading-none text-gold/25"
+                  >
+                    {p.initials}
+                  </span>
+                  <div className="relative">
+                    <p.icon className="h-7 w-7 text-gold" />
+                    <h2 className="mt-4 text-2xl">{author}</h2>
+                    <p className="font-display text-[10px] uppercase tracking-[0.3em] text-gold">
+                      {p.role}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <p className="mt-6 max-w-3xl text-muted-foreground">{p.intro}</p>
 
-              <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_1fr]">
-                <div className="space-y-4">
-                  {list.map((q) => (
-                    <figure key={q.id} className="rounded-sm border border-border bg-card p-6">
-                      <blockquote className="text-lg leading-snug">"{q.text}"</blockquote>
-                      {q.context && (
-                        <figcaption className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">
-                          {q.context}
-                        </figcaption>
-                      )}
-                    </figure>
-                  ))}
+                <div>
+                  <p
+                    className={`max-w-3xl text-lg ${light ? "text-surface-light-muted" : "text-muted-foreground"}`}
+                  >
+                    {p.intro}
+                  </p>
+
+                  <dl className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+                    {p.facts.map(([value, label]) => (
+                      <div
+                        key={label}
+                        className={`rounded-sm border p-4 ${
+                          light ? "border-surface-light-border bg-white" : "border-border bg-card"
+                        }`}
+                      >
+                        <dt className="font-display text-xl text-gold">{value}</dt>
+                        <dd
+                          className={`mt-1 text-xs uppercase tracking-widest ${
+                            light ? "text-surface-light-muted" : "text-muted-foreground"
+                          }`}
+                        >
+                          {label}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <div className="mt-10 grid gap-6 lg:grid-cols-2">
+                    <div className="space-y-4">
+                      {list.map((q) => (
+                        <figure
+                          key={q.id}
+                          className={`rounded-sm border p-6 ${
+                            light ? "border-surface-light-border bg-white" : "border-border bg-card"
+                          }`}
+                        >
+                          <blockquote className="text-lg leading-snug">"{q.text}"</blockquote>
+                          {q.context && (
+                            <figcaption
+                              className={`mt-3 text-xs uppercase tracking-widest ${
+                                light ? "text-surface-light-muted" : "text-muted-foreground"
+                              }`}
+                            >
+                              {q.context}
+                            </figcaption>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                    <ul
+                      className={`space-y-4 rounded-sm border border-gold/40 p-8 ${
+                        light ? "bg-white" : "bg-card"
+                      }`}
+                    >
+                      <li className="font-display text-xs uppercase tracking-[0.3em] text-gold">
+                        Principles to train by
+                      </li>
+                      {p.rules.map((r) => (
+                        <li
+                          key={r}
+                          className={`border-t pt-4 ${
+                            light ? "border-surface-light-border" : "border-border"
+                          }`}
+                        >
+                          {r}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <ul className="space-y-4 rounded-sm border border-gold/40 bg-card p-8">
-                  <li className="font-display text-xs uppercase tracking-[0.3em] text-gold">
-                    Principles to train by
-                  </li>
-                  {p.rules.map((r) => (
-                    <li key={r} className="border-t border-border pt-4 text-foreground">
-                      {r}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </section>

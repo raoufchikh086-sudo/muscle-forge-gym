@@ -185,7 +185,40 @@ function Index() {
         </div>
       </section>
 
+      <section className="bg-surface-light text-surface-light-foreground">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 md:grid-cols-2">
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.4em] text-gold-soft">
+              Video technique library
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl">See every rep before you do it</h2>
+            <p className="mt-6 text-surface-light-muted">
+              Squats, deadlifts, presses, pull-ups, muscle-ups, pistols and levers — each movement
+              comes with a video demonstration and the three cues that actually change your form.
+            </p>
+            <Link
+              to="/technique"
+              className="mt-8 inline-flex h-12 items-center gap-2 rounded-sm bg-gold px-6 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground hover:opacity-90"
+            >
+              Watch training videos <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {["Barbell back squat", "Pull-up", "Dumbbell bench press", "Muscle-up"].map((n) => (
+              <Link
+                key={n}
+                to="/technique"
+                className="flex aspect-video items-end rounded-sm border border-surface-light-border bg-white p-4 transition-colors hover:border-gold"
+              >
+                <span className="font-display text-sm uppercase tracking-widest">{n}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-border bg-card">
+
         <div className="mx-auto max-w-7xl px-4 py-20">
           <h2 className="text-3xl md:text-4xl">Words that carry the weight</h2>
           <div className="mt-2 h-px w-24 gold-rule" />

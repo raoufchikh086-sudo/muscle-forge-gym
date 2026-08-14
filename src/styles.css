@@ -38,8 +38,13 @@
   --color-ring-offset-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-foreground: var(--surface-foreground);
+  --color-surface-light: var(--surface-light);
+  --color-surface-light-foreground: var(--surface-light-foreground);
+  --color-surface-light-muted: var(--surface-light-muted);
+  --color-surface-light-border: var(--surface-light-border);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -78,8 +83,13 @@
   --ring: oklch(0.75 0.13 88);
   --surface: oklch(0.21 0.011 62);
   --surface-foreground: oklch(0.95 0.012 85);
+  --surface-light: oklch(0.968 0.008 90);
+  --surface-light-foreground: oklch(0.22 0.008 65);
+  --surface-light-muted: oklch(0.46 0.012 70);
+  --surface-light-border: oklch(0.88 0.012 85);
   --gold: oklch(0.75 0.13 88);
   --gold-soft: oklch(0.62 0.1 88);
+
   --chart-1: oklch(0.75 0.13 88);
   --chart-2: oklch(0.62 0.1 88);
   --chart-3: oklch(0.55 0.05 80);

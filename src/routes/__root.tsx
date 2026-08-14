@@ -16,6 +16,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { CartProvider } from "@/hooks/use-cart";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { AIAssistant } from "@/components/site/ai-assistant";
+
 
 function NotFoundComponent() {
   return (
@@ -146,8 +148,10 @@ function RootComponent() {
           </main>
           <SiteFooter />
         </div>
+        <AIAssistant />
         <Toaster position="top-center" richColors />
       </CartProvider>
+
     </QueryClientProvider>
   );
 }
