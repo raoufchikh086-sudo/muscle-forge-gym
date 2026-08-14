@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CoachingRouteImport } from './routes/coaching'
 import { Route as MotivationRouteImport } from './routes/motivation'
+import { Route as TechniqueRouteImport } from './routes/technique'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as ProgramsIndexRouteImport } from './routes/programs.index'
@@ -49,6 +50,11 @@ const CoachingRoute = CoachingRouteImport.update({
 const MotivationRoute = MotivationRouteImport.update({
   id: '/motivation',
   path: '/motivation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TechniqueRoute = TechniqueRouteImport.update({
+  id: '/technique',
+  path: '/technique',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/motivation': typeof MotivationRoute
+  '/technique': typeof TechniqueRoute
   '/chat': typeof AuthenticatedChatRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/programs/$slug': typeof ProgramsSlugRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/motivation': typeof MotivationRoute
+  '/technique': typeof TechniqueRoute
   '/chat': typeof AuthenticatedChatRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/programs/$slug': typeof ProgramsSlugRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/motivation': typeof MotivationRoute
+  '/technique': typeof TechniqueRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/programs/$slug': typeof ProgramsSlugRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/motivation'
+    | '/technique'
     | '/chat'
     | '/profile'
     | '/programs/$slug'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/motivation'
+    | '/technique'
     | '/chat'
     | '/profile'
     | '/programs/$slug'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/motivation'
+    | '/technique'
     | '/_authenticated/chat'
     | '/_authenticated/profile'
     | '/programs/$slug'
@@ -173,6 +185,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CoachingRoute: typeof CoachingRoute
   MotivationRoute: typeof MotivationRoute
+  TechniqueRoute: typeof TechniqueRoute
   ProgramsSlugRoute: typeof ProgramsSlugRoute
   ShopSlugRoute: typeof ShopSlugRoute
   ProgramsIndexRoute: typeof ProgramsIndexRoute
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/motivation'
       fullPath: '/motivation'
       preLoaderRoute: typeof MotivationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/technique': {
+      id: '/technique'
+      path: '/technique'
+      fullPath: '/technique'
+      preLoaderRoute: typeof TechniqueRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/chat': {
@@ -288,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CoachingRoute: CoachingRoute,
   MotivationRoute: MotivationRoute,
+  TechniqueRoute: TechniqueRoute,
   ProgramsSlugRoute: ProgramsSlugRoute,
   ShopSlugRoute: ShopSlugRoute,
   ProgramsIndexRoute: ProgramsIndexRoute,

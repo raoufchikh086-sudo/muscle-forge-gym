@@ -1,6 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Play } from "lucide-react";
 import { getProgram, type ProgramExercise } from "@/lib/public-content.functions";
+import { findTechnique, type TechniqueVideo } from "@/lib/technique-videos";
+import { ExerciseVideoModal } from "@/components/technique/exercise-video-modal";
+
 
 const programQuery = (slug: string) =>
   queryOptions({
@@ -52,8 +57,10 @@ export const Route = createFileRoute("/programs/$slug")({
 function ProgramDetail() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(programQuery(slug));
+  const [active, setActive] = useState<TechniqueVideo | null>(null);
   if (!data) return null;
   const { program, days } = data;
+
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
@@ -103,7 +110,9 @@ function ProgramDetail() {
                 </span>
               </header>
               <div className="divide-y divide-border">
-                {exercises.map((ex) => (
+                {exercises.map((ex) => {
+                  const video = findTechnique(ex.name);
+                  return (
                   <div
                     key={ex.name}
                     className="grid gap-2 px-6 py-4 md:grid-cols-[2fr_repeat(3,minmax(0,0.6fr))] md:items-center"
@@ -111,7 +120,16 @@ function ProgramDetail() {
                     <div>
                       <p className="font-medium text-foreground">{ex.name}</p>
                       {ex.note && <p className="text-xs text-muted-foreground">{ex.note}</p>}
+                      {video && (
+                        <button
+                          onClick={() => setActive(video)}
+                          className="mt-1 inline-flex items-center gap-1 font-display text-[10px] uppercase tracking-widest text-gold hover:opacity-80"
+                        >
+                          <Play className="h-3 w-3" /> Watch technique
+                        </button>
+                      )}
                     </div>
+
                     <p className="text-sm text-muted-foreground">
                       <span className="text-gold">Sets </span>
                       {ex.sets}
@@ -125,7 +143,9 @@ function ProgramDetail() {
                       {ex.rest}
                     </p>
                   </div>
-                ))}
+                  );
+                })}
+
               </div>
             </section>
           );
@@ -145,6 +165,9 @@ function ProgramDetail() {
           See coaching
         </Link>
       </div>
+
+      {active && <ExerciseVideoModal video={active} onClose={() => setActive(null)} />}
     </div>
+
   );
 }
