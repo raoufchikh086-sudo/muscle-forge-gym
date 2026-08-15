@@ -4,6 +4,10 @@ import { Play } from "lucide-react";
 import {
   techniqueCategories,
   techniqueVideos,
+  muscleGroups,
+  levels,
+  type MuscleGroup,
+  type Level,
   type TechniqueCategory,
   type TechniqueVideo,
 } from "@/lib/technique-videos";
