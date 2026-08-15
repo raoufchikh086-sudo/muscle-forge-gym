@@ -4,6 +4,10 @@ import { Play } from "lucide-react";
 import {
   techniqueCategories,
   techniqueVideos,
+  muscleGroups,
+  levels,
+  type MuscleGroup,
+  type Level,
   type TechniqueCategory,
   type TechniqueVideo,
 } from "@/lib/technique-videos";
@@ -30,8 +34,15 @@ export const Route = createFileRoute("/technique")({
 
 function TechniquePage() {
   const [filter, setFilter] = useState<TechniqueCategory | "all">("all");
+  const [muscle, setMuscle] = useState<MuscleGroup | "all">("all");
+  const [level, setLevel] = useState<Level | "all">("all");
   const [active, setActive] = useState<TechniqueVideo | null>(null);
-  const list = techniqueVideos.filter((v) => filter === "all" || v.category === filter);
+  const list = techniqueVideos.filter(
+    (v) =>
+      (filter === "all" || v.category === filter) &&
+      (muscle === "all" || v.muscleGroup === muscle) &&
+      (level === "all" || v.level === level),
+  );
 
   return (
     <div>
@@ -58,6 +69,38 @@ function TechniquePage() {
                 }`}
               >
                 {c.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {muscleGroups.map((m) => (
+              <button
+                key={m.value}
+                onClick={() => setMuscle(m.value)}
+                className={`h-9 rounded-sm border px-3 font-display text-[11px] uppercase tracking-widest ${
+                  muscle === m.value
+                    ? "border-gold bg-gold text-primary-foreground"
+                    : "border-surface-light-border text-surface-light-muted hover:border-gold"
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {levels.map((l) => (
+              <button
+                key={l.value}
+                onClick={() => setLevel(l.value)}
+                className={`h-9 rounded-sm border px-3 font-display text-[11px] uppercase tracking-widest ${
+                  level === l.value
+                    ? "border-gold bg-gold text-primary-foreground"
+                    : "border-surface-light-border text-surface-light-muted hover:border-gold"
+                }`}
+              >
+                {l.label}
               </button>
             ))}
           </div>
