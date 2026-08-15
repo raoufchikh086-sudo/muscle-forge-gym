@@ -39,7 +39,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-5 lg:flex">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -91,7 +91,7 @@ export function SiteHeader() {
           )}
 
           <button
-            className="inline-flex h-10 w-10 items-center justify-center text-foreground md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >
@@ -101,7 +101,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-card md:hidden">
+        <div className="border-t border-border bg-card lg:hidden">
           <div className="flex flex-col px-4 py-3">
             {links.map((l) => (
               <Link
