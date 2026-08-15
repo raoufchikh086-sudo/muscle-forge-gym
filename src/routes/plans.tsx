@@ -147,7 +147,7 @@ function PlansPage() {
                 <button
                   onClick={() =>
                     add({
-                      id: p.slug,
+                      slug: p.slug,
                       name: p.title,
                       priceCents: p.price,
                       kind: "product",

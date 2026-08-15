@@ -16,7 +16,11 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CoachingRouteImport } from './routes/coaching'
 import { Route as GeneratorRouteImport } from './routes/generator'
+import { Route as HomeGymRouteImport } from './routes/home-gym'
 import { Route as MotivationRouteImport } from './routes/motivation'
+import { Route as NutritionRouteImport } from './routes/nutrition'
+import { Route as PlansRouteImport } from './routes/plans'
+import { Route as SkillsRouteImport } from './routes/skills'
 import { Route as TechniqueRouteImport } from './routes/technique'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -59,9 +63,29 @@ const GeneratorRoute = GeneratorRouteImport.update({
   path: '/generator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeGymRoute = HomeGymRouteImport.update({
+  id: '/home-gym',
+  path: '/home-gym',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MotivationRoute = MotivationRouteImport.update({
   id: '/motivation',
   path: '/motivation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NutritionRoute = NutritionRouteImport.update({
+  id: '/nutrition',
+  path: '/nutrition',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkillsRoute = SkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TechniqueRoute = TechniqueRouteImport.update({
@@ -107,7 +131,11 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/generator': typeof GeneratorRoute
+  '/home-gym': typeof HomeGymRoute
   '/motivation': typeof MotivationRoute
+  '/nutrition': typeof NutritionRoute
+  '/plans': typeof PlansRoute
+  '/skills': typeof SkillsRoute
   '/technique': typeof TechniqueRoute
   '/chat': typeof AuthenticatedChatRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -123,7 +151,11 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/generator': typeof GeneratorRoute
+  '/home-gym': typeof HomeGymRoute
   '/motivation': typeof MotivationRoute
+  '/nutrition': typeof NutritionRoute
+  '/plans': typeof PlansRoute
+  '/skills': typeof SkillsRoute
   '/technique': typeof TechniqueRoute
   '/chat': typeof AuthenticatedChatRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -141,7 +173,11 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
   '/generator': typeof GeneratorRoute
+  '/home-gym': typeof HomeGymRoute
   '/motivation': typeof MotivationRoute
+  '/nutrition': typeof NutritionRoute
+  '/plans': typeof PlansRoute
+  '/skills': typeof SkillsRoute
   '/technique': typeof TechniqueRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -159,7 +195,11 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/generator'
+    | '/home-gym'
     | '/motivation'
+    | '/nutrition'
+    | '/plans'
+    | '/skills'
     | '/technique'
     | '/chat'
     | '/profile'
@@ -175,7 +215,11 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/generator'
+    | '/home-gym'
     | '/motivation'
+    | '/nutrition'
+    | '/plans'
+    | '/skills'
     | '/technique'
     | '/chat'
     | '/profile'
@@ -192,7 +236,11 @@ export interface FileRouteTypes {
     | '/cart'
     | '/coaching'
     | '/generator'
+    | '/home-gym'
     | '/motivation'
+    | '/nutrition'
+    | '/plans'
+    | '/skills'
     | '/technique'
     | '/_authenticated/chat'
     | '/_authenticated/profile'
@@ -210,7 +258,11 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CoachingRoute: typeof CoachingRoute
   GeneratorRoute: typeof GeneratorRoute
+  HomeGymRoute: typeof HomeGymRoute
   MotivationRoute: typeof MotivationRoute
+  NutritionRoute: typeof NutritionRoute
+  PlansRoute: typeof PlansRoute
+  SkillsRoute: typeof SkillsRoute
   TechniqueRoute: typeof TechniqueRoute
   ProgramsSlugRoute: typeof ProgramsSlugRoute
   ShopSlugRoute: typeof ShopSlugRoute
@@ -269,11 +321,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home-gym': {
+      id: '/home-gym'
+      path: '/home-gym'
+      fullPath: '/home-gym'
+      preLoaderRoute: typeof HomeGymRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/motivation': {
       id: '/motivation'
       path: '/motivation'
       fullPath: '/motivation'
       preLoaderRoute: typeof MotivationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nutrition': {
+      id: '/nutrition'
+      path: '/nutrition'
+      fullPath: '/nutrition'
+      preLoaderRoute: typeof NutritionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills': {
+      id: '/skills'
+      path: '/skills'
+      fullPath: '/skills'
+      preLoaderRoute: typeof SkillsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/technique': {
@@ -349,7 +429,11 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CoachingRoute: CoachingRoute,
   GeneratorRoute: GeneratorRoute,
+  HomeGymRoute: HomeGymRoute,
   MotivationRoute: MotivationRoute,
+  NutritionRoute: NutritionRoute,
+  PlansRoute: PlansRoute,
+  SkillsRoute: SkillsRoute,
   TechniqueRoute: TechniqueRoute,
   ProgramsSlugRoute: ProgramsSlugRoute,
   ShopSlugRoute: ShopSlugRoute,
