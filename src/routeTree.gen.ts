@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AnatomyRouteImport } from './routes/anatomy'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CoachingRouteImport } from './routes/coaching'
@@ -30,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnatomyRoute = AnatomyRouteImport.update({
+  id: '/anatomy',
+  path: '/anatomy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -90,6 +96,7 @@ const ShopSlugRoute = ShopSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/anatomy': typeof AnatomyRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/anatomy': typeof AnatomyRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/anatomy': typeof AnatomyRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/coaching': typeof CoachingRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/anatomy'
     | '/auth'
     | '/cart'
     | '/coaching'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/anatomy'
     | '/auth'
     | '/cart'
     | '/coaching'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/anatomy'
     | '/auth'
     | '/cart'
     | '/coaching'
@@ -181,6 +193,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AnatomyRoute: typeof AnatomyRoute
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CoachingRoute: typeof CoachingRoute
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anatomy': {
+      id: '/anatomy'
+      path: '/anatomy'
+      fullPath: '/anatomy'
+      preLoaderRoute: typeof AnatomyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -304,6 +324,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AnatomyRoute: AnatomyRoute,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CoachingRoute: CoachingRoute,
