@@ -72,6 +72,38 @@ function TechniquePage() {
               </button>
             ))}
           </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {muscleGroups.map((m) => (
+              <button
+                key={m.value}
+                onClick={() => setMuscle(m.value)}
+                className={`h-9 rounded-sm border px-3 font-display text-[11px] uppercase tracking-widest ${
+                  muscle === m.value
+                    ? "border-gold bg-gold text-primary-foreground"
+                    : "border-surface-light-border text-surface-light-muted hover:border-gold"
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {levels.map((l) => (
+              <button
+                key={l.value}
+                onClick={() => setLevel(l.value)}
+                className={`h-9 rounded-sm border px-3 font-display text-[11px] uppercase tracking-widest ${
+                  level === l.value
+                    ? "border-gold bg-gold text-primary-foreground"
+                    : "border-surface-light-border text-surface-light-muted hover:border-gold"
+                }`}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
