@@ -30,8 +30,15 @@ export const Route = createFileRoute("/technique")({
 
 function TechniquePage() {
   const [filter, setFilter] = useState<TechniqueCategory | "all">("all");
+  const [muscle, setMuscle] = useState<MuscleGroup | "all">("all");
+  const [level, setLevel] = useState<Level | "all">("all");
   const [active, setActive] = useState<TechniqueVideo | null>(null);
-  const list = techniqueVideos.filter((v) => filter === "all" || v.category === filter);
+  const list = techniqueVideos.filter(
+    (v) =>
+      (filter === "all" || v.category === filter) &&
+      (muscle === "all" || v.muscleGroup === muscle) &&
+      (level === "all" || v.level === level),
+  );
 
   return (
     <div>
