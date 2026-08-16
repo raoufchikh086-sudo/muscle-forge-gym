@@ -142,16 +142,29 @@ function Index() {
                 key={p.id}
                 to="/programs/$slug"
                 params={{ slug: p.slug }}
-                className="rounded-sm border border-border bg-background p-6 transition-colors hover:border-gold"
+                className="group overflow-hidden rounded-sm border border-border bg-background transition-colors hover:border-gold"
               >
-                <span className="font-display text-[10px] uppercase tracking-[0.3em] text-gold">
-                  {p.level} · {p.goal}
-                </span>
-                <h3 className="mt-3 text-xl">{p.title}</h3>
-                <p className="mt-3 text-sm text-muted-foreground">{p.summary}</p>
-                <p className="mt-5 text-xs text-muted-foreground">
-                  {p.weeks} weeks · {p.days_per_week} days/week
-                </p>
+                <div className="relative aspect-video overflow-hidden">
+                  <img
+                    src={programImage(p.slug)}
+                    alt={programImageAlt(p.title, p.environment)}
+                    width={1280}
+                    height={720}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                  <span className="absolute bottom-3 start-4 font-display text-[10px] uppercase tracking-[0.3em] text-gold">
+                    {p.level} · {p.goal}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl">{p.title}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground">{p.summary}</p>
+                  <p className="mt-5 text-xs text-muted-foreground">
+                    {p.weeks} weeks · {p.days_per_week} days/week
+                  </p>
+                </div>
               </Link>
             ))}
           </div>
