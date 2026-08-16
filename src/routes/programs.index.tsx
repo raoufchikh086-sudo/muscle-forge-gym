@@ -86,6 +86,7 @@ function ProgramsPage() {
   const { data: programs } = useSuspenseQuery(programsQuery);
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
+  const t = useT();
 
   const env = search.env ?? "all";
   const level = search.level ?? "all";
@@ -103,7 +104,7 @@ function ProgramsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-16">
-      <h1 className="text-4xl md:text-5xl">Programs</h1>
+      <h1 className="text-4xl md:text-5xl">{t("programs.title")}</h1>
       <div className="mt-2 h-px w-24 gold-rule" />
       <p className="mt-6 max-w-2xl text-muted-foreground">
         Every program is written for a specific setup. Pick where you train, how experienced you
@@ -112,40 +113,41 @@ function ProgramsPage() {
 
       <div className="mt-10 flex flex-col gap-4 rounded-sm border border-border bg-card p-6">
         <FilterRow
-          label="Where"
+          label={t("programs.filterWhere")}
           value={env}
           onChange={(env) => update({ env })}
           options={[
-            { value: "all", label: "All" },
-            { value: "gym", label: "Gym" },
-            { value: "home_equipment", label: "Home + machines" },
-            { value: "calisthenics", label: "No equipment" },
+            { value: "all", label: t("programs.all") },
+            { value: "gym", label: t("programs.gym") },
+            { value: "home_equipment", label: t("programs.homeEquipment") },
+            { value: "calisthenics", label: t("programs.calisthenics") },
           ]}
         />
         <FilterRow
-          label="Level"
+          label={t("programs.filterLevel")}
           value={level}
           onChange={(level) => update({ level })}
           options={[
-            { value: "all", label: "All" },
-            { value: "beginner", label: "Beginner" },
-            { value: "intermediate", label: "Intermediate" },
-            { value: "advanced", label: "Advanced" },
+            { value: "all", label: t("programs.all") },
+            { value: "beginner", label: t("programs.beginner") },
+            { value: "intermediate", label: t("programs.intermediate") },
+            { value: "advanced", label: t("programs.advanced") },
           ]}
         />
         <FilterRow
-          label="Goal"
+          label={t("programs.filterGoal")}
           value={goal}
           onChange={(goal) => update({ goal })}
           options={[
-            { value: "all", label: "All" },
-            { value: "mass", label: "Mass" },
-            { value: "strength", label: "Strength" },
-            { value: "cut", label: "Cut" },
-            { value: "endurance", label: "Endurance" },
+            { value: "all", label: t("programs.all") },
+            { value: "mass", label: t("programs.mass") },
+            { value: "strength", label: t("programs.strength") },
+            { value: "cut", label: t("programs.cut") },
+            { value: "endurance", label: t("programs.endurance") },
           ]}
         />
       </div>
+
 
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((p) => (
