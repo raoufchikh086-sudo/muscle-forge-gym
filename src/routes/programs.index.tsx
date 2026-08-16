@@ -151,35 +151,48 @@ function ProgramsPage() {
             key={p.id}
             to="/programs/$slug"
             params={{ slug: p.slug }}
-            className="flex flex-col rounded-sm border border-border bg-card p-6 transition-colors hover:border-gold"
+            className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition-colors hover:border-gold"
           >
-            <span className="font-display text-[10px] uppercase tracking-[0.3em] text-gold">
-              {envLabels[p.environment as Exclude<Env, "all">]}
-            </span>
-            <h2 className="mt-3 text-xl">{p.title}</h2>
-            <p className="mt-3 flex-1 text-sm text-muted-foreground">{p.summary}</p>
-            <dl className="mt-6 grid grid-cols-3 gap-2 border-t border-border pt-4 text-xs text-muted-foreground">
-              <div>
-                <dt className="text-gold">Level</dt>
-                <dd className="capitalize">{p.level}</dd>
-              </div>
-              <div>
-                <dt className="text-gold">Goal</dt>
-                <dd className="capitalize">{p.goal}</dd>
-              </div>
-              <div>
-                <dt className="text-gold">Length</dt>
-                <dd>{p.weeks} weeks</dd>
-              </div>
-            </dl>
+            <div className="relative aspect-video overflow-hidden">
+              <img
+                src={programImage(p.slug)}
+                alt={programImageAlt(p.title, p.environment)}
+                width={1280}
+                height={720}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+              <span className="absolute bottom-3 start-4 font-display text-[10px] uppercase tracking-[0.3em] text-gold">
+                {envLabels[p.environment as Exclude<Env, "all">]}
+              </span>
+            </div>
+            <div className="flex flex-1 flex-col p-6">
+              <h2 className="text-xl">{p.title}</h2>
+              <p className="mt-3 flex-1 text-sm text-muted-foreground">{p.summary}</p>
+              <dl className="mt-6 grid grid-cols-3 gap-2 border-t border-border pt-4 text-xs text-muted-foreground">
+                <div>
+                  <dt className="text-gold">{t("programs.filterLevel")}</dt>
+                  <dd className="capitalize">{p.level}</dd>
+                </div>
+                <div>
+                  <dt className="text-gold">{t("programs.filterGoal")}</dt>
+                  <dd className="capitalize">{p.goal}</dd>
+                </div>
+                <div>
+                  <dt className="text-gold">{t("programs.length")}</dt>
+                  <dd>
+                    {p.weeks} {t("programs.weeks")}
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </Link>
         ))}
       </div>
 
       {filtered.length === 0 && (
-        <p className="mt-16 text-center text-muted-foreground">
-          No program matches those filters yet. Try widening them.
-        </p>
+        <p className="mt-16 text-center text-muted-foreground">{t("programs.empty")}</p>
       )}
     </div>
   );
