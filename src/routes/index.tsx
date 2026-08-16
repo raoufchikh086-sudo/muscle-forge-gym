@@ -184,7 +184,7 @@ function Index() {
           className="rounded-sm border border-border object-cover"
         />
         <div>
-          <h2 className="text-3xl md:text-4xl">No gym? No excuse.</h2>
+          <h2 className="text-3xl md:text-4xl">{t("home.noGym")}</h2>
           <div className="mt-2 h-px w-24 gold-rule" />
           <p className="mt-6 text-muted-foreground">
             Bodyweight training built the strongest athletes on the street long before machines
@@ -196,7 +196,7 @@ function Index() {
             search={{ env: "calisthenics" }}
             className="mt-8 inline-flex h-12 items-center rounded-sm border border-gold px-6 font-display text-sm uppercase tracking-widest text-gold hover:bg-gold/10"
           >
-            Bodyweight programs
+            {t("home.bodyweightPrograms")}
           </Link>
         </div>
       </section>
@@ -205,9 +205,9 @@ function Index() {
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 md:grid-cols-2">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.4em] text-gold-soft">
-              Video technique library
+              {t("home.videoKicker")}
             </p>
-            <h2 className="mt-4 text-3xl md:text-4xl">See every rep before you do it</h2>
+            <h2 className="mt-4 text-3xl md:text-4xl">{t("home.videoTitle")}</h2>
             <p className="mt-6 text-surface-light-muted">
               Squats, deadlifts, presses, pull-ups, muscle-ups, pistols and levers — each movement
               comes with a video demonstration and the three cues that actually change your form.
@@ -216,7 +216,7 @@ function Index() {
               to="/technique"
               className="mt-8 inline-flex h-12 items-center gap-2 rounded-sm bg-gold px-6 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground hover:opacity-90"
             >
-              Watch training videos <ArrowRight className="h-4 w-4" />
+              {t("home.videoCta")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -236,7 +236,7 @@ function Index() {
       <section className="border-t border-border bg-card">
 
         <div className="mx-auto max-w-7xl px-4 py-20">
-          <h2 className="text-3xl md:text-4xl">Words that carry the weight</h2>
+          <h2 className="text-3xl md:text-4xl">{t("home.quotes")}</h2>
           <div className="mt-2 h-px w-24 gold-rule" />
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {strip.map((q) => (
@@ -252,7 +252,7 @@ function Index() {
             to="/motivation"
             className="mt-10 inline-flex h-12 items-center rounded-sm bg-gold px-6 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground hover:opacity-90"
           >
-            Goggins & Khabib wall
+            {t("home.quotesCta")}
           </Link>
         </div>
       </section>
