@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { CartProvider } from "@/hooks/use-cart";
+import { LanguageProvider } from "@/lib/i18n/language-provider";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { AIAssistant } from "@/components/site/ai-assistant";
@@ -139,18 +140,21 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">
-            {/* Required: nested routes render here. */}
-            <Outlet />
-          </main>
-          <SiteFooter />
-        </div>
-        <AIAssistant />
-        <Toaster position="top-center" richColors />
-      </CartProvider>
+      <LanguageProvider>
+        <CartProvider>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">
+              {/* Required: nested routes render here. */}
+              <Outlet />
+            </main>
+            <SiteFooter />
+          </div>
+          <AIAssistant />
+          <Toaster position="top-center" richColors />
+        </CartProvider>
+      </LanguageProvider>
+
 
     </QueryClientProvider>
   );

@@ -4,26 +4,31 @@ import { Menu, ShoppingBag, User as UserIcon, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/lib/i18n/language-provider";
+import type { TranslationKey } from "@/lib/i18n/dictionaries";
+import { LanguageSettings } from "@/components/site/language-settings";
 
 const links = [
-  { to: "/programs", label: "Programs" },
-  { to: "/generator", label: "Generator" },
-  { to: "/technique", label: "Technique" },
-  { to: "/skills", label: "Skills" },
-  { to: "/anatomy", label: "Anatomy" },
-  { to: "/nutrition", label: "Nutrition" },
-  { to: "/home-gym", label: "Home gym" },
-  { to: "/plans", label: "Plans" },
-  { to: "/coaching", label: "Coaching" },
-  { to: "/shop", label: "Shop" },
-  { to: "/motivation", label: "Motivation" },
-] as const;
+  { to: "/programs", key: "nav.programs" },
+  { to: "/generator", key: "nav.generator" },
+  { to: "/technique", key: "nav.technique" },
+  { to: "/skills", key: "nav.skills" },
+  { to: "/anatomy", key: "nav.anatomy" },
+  { to: "/nutrition", key: "nav.nutrition" },
+  { to: "/home-gym", key: "nav.homeGym" },
+  { to: "/plans", key: "nav.plans" },
+  { to: "/coaching", key: "nav.coaching" },
+  { to: "/shop", key: "nav.shop" },
+  { to: "/motivation", key: "nav.motivation" },
+] as const satisfies ReadonlyArray<{ to: string; key: TranslationKey }>;
 
 export function SiteHeader() {
   const { isAuthenticated } = useAuth();
   const { count } = useCart();
   const [open, setOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const navigate = useNavigate();
+  const t = useT();
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -47,16 +52,18 @@ export function SiteHeader() {
               className="font-display text-sm uppercase tracking-widest text-muted-foreground transition-colors hover:text-gold"
               activeProps={{ className: "text-gold" }}
             >
-              {l.label}
+              {t(l.key)}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageSettings open={settingsOpen} onOpenChange={setSettingsOpen} />
+
           <Link
             to="/cart"
             className="relative inline-flex h-10 w-10 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-gold"
-            aria-label="Cart"
+            aria-label={t("nav.cart")}
           >
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (
@@ -72,13 +79,13 @@ export function SiteHeader() {
                 to="/profile"
                 className="inline-flex h-10 items-center gap-2 rounded-sm border border-border px-3 font-display text-xs uppercase tracking-widest text-foreground hover:border-gold hover:text-gold"
               >
-                <UserIcon className="h-4 w-4" /> Profile
+                <UserIcon className="h-4 w-4" /> {t("nav.profile")}
               </Link>
               <button
                 onClick={signOut}
                 className="h-10 px-3 font-display text-xs uppercase tracking-widest text-muted-foreground hover:text-gold"
               >
-                Sign out
+                {t("nav.signOut")}
               </button>
             </div>
           ) : (
@@ -86,14 +93,14 @@ export function SiteHeader() {
               to="/auth"
               className="hidden h-10 items-center rounded-sm bg-gold px-4 font-display text-xs font-bold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90 md:inline-flex"
             >
-              Join
+              {t("nav.join")}
             </Link>
           )}
 
           <button
             className="inline-flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
             onClick={() => setOpen((v) => !v)}
-            aria-label="Menu"
+            aria-label={t("nav.menu")}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -110,9 +117,17 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="py-3 font-display text-sm uppercase tracking-widest text-foreground"
               >
-                {l.label}
+                {t(l.key)}
               </Link>
             ))}
+            <LanguageSettings
+              variant="row"
+              open={settingsOpen}
+              onOpenChange={(v) => {
+                setSettingsOpen(v);
+                if (v) setOpen(false);
+              }}
+            />
             {isAuthenticated ? (
               <>
                 <Link
@@ -120,23 +135,23 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className="py-3 font-display text-sm uppercase tracking-widest text-foreground"
                 >
-                  Profile
+                  {t("nav.profile")}
                 </Link>
                 <Link
                   to="/chat"
                   onClick={() => setOpen(false)}
                   className="py-3 font-display text-sm uppercase tracking-widest text-foreground"
                 >
-                  Chat
+                  {t("nav.chat")}
                 </Link>
                 <button
                   onClick={() => {
                     setOpen(false);
                     void signOut();
                   }}
-                  className="py-3 text-left font-display text-sm uppercase tracking-widest text-muted-foreground"
+                  className="py-3 text-start font-display text-sm uppercase tracking-widest text-muted-foreground"
                 >
-                  Sign out
+                  {t("nav.signOut")}
                 </button>
               </>
             ) : (
@@ -145,7 +160,7 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="mt-2 inline-flex h-11 items-center justify-center rounded-sm bg-gold font-display text-sm font-bold uppercase tracking-widest text-primary-foreground"
               >
-                Join
+                {t("nav.join")}
               </Link>
             )}
           </div>
