@@ -62,6 +62,7 @@ function Index() {
   const { data: quotes } = useSuspenseQuery(quotesQuery);
   const featured = programs.slice(0, 3);
   const strip = quotes.filter((q) => q.featured).slice(0, 3);
+  const t = useT();
 
   return (
     <div>
