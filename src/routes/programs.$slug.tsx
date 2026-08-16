@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Play } from "lucide-react";
 import { getProgram, type ProgramExercise } from "@/lib/public-content.functions";
+import { programImage, programImageAlt } from "@/lib/program-images";
 import { findTechnique, type TechniqueVideo } from "@/lib/technique-videos";
 import { ExerciseVideoModal } from "@/components/technique/exercise-video-modal";
 
@@ -185,6 +186,7 @@ function ProgramDetail() {
       </div>
 
       {active && <ExerciseVideoModal video={active} onClose={() => setActive(null)} />}
+      </div>
     </div>
 
   );
