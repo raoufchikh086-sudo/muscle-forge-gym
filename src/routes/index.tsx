@@ -4,6 +4,8 @@ import { Dumbbell, Home as HomeIcon, Activity, ArrowRight } from "lucide-react";
 import heroImg from "@/assets/hero-gym.jpg";
 import calisthenicsImg from "@/assets/calisthenics.jpg";
 import { listPrograms, listQuotes } from "@/lib/public-content.functions";
+import { programImage, programImageAlt } from "@/lib/program-images";
+import { useT } from "@/lib/i18n/language-provider";
 
 const programsQuery = queryOptions({ queryKey: ["programs"], queryFn: () => listPrograms() });
 const quotesQuery = queryOptions({ queryKey: ["quotes"], queryFn: () => listQuotes() });
