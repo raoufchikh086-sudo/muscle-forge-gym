@@ -77,7 +77,7 @@ function Index() {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
         <div className="relative mx-auto flex min-h-[80vh] max-w-7xl flex-col justify-center px-4 py-24">
           <p className="font-display text-sm uppercase tracking-[0.4em] text-gold">
-            Bodybuilding · Calisthenics
+            {t("home.kicker")}
           </p>
           <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] md:text-7xl">
             Your body is the <span className="text-gold">only machine</span> you can't replace
@@ -91,20 +91,20 @@ function Index() {
               to="/programs"
               className="inline-flex h-12 items-center gap-2 rounded-sm bg-gold px-6 font-display text-sm font-bold uppercase tracking-widest text-primary-foreground hover:opacity-90"
             >
-              Start training <ArrowRight className="h-4 w-4" />
+              {t("home.ctaStart")} <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/coaching"
               className="inline-flex h-12 items-center rounded-sm border border-gold px-6 font-display text-sm uppercase tracking-widest text-gold hover:bg-gold/10"
             >
-              Get a coach
+              {t("home.ctaCoach")}
             </Link>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <h2 className="text-3xl md:text-4xl">Where do you train?</h2>
+        <h2 className="text-3xl md:text-4xl">{t("home.whereTrain")}</h2>
         <div className="mt-2 h-px w-24 gold-rule" />
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {paths.map((p) => (
@@ -118,7 +118,7 @@ function Index() {
               <h3 className="mt-6 text-xl">{p.title}</h3>
               <p className="mt-3 text-sm text-muted-foreground">{p.text}</p>
               <span className="mt-6 inline-flex items-center gap-2 font-display text-xs uppercase tracking-widest text-gold">
-                See programs <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                {t("home.seePrograms")} <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
               </span>
             </Link>
           ))}
@@ -129,14 +129,14 @@ function Index() {
         <div className="mx-auto max-w-7xl px-4 py-20">
           <div className="flex items-end justify-between">
             <div>
-              <h2 className="text-3xl md:text-4xl">Featured programs</h2>
+              <h2 className="text-3xl md:text-4xl">{t("home.featured")}</h2>
               <div className="mt-2 h-px w-24 gold-rule" />
             </div>
             <Link
               to="/programs"
               className="hidden font-display text-xs uppercase tracking-widest text-gold md:inline"
             >
-              All programs
+              {t("home.allPrograms")}
             </Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
