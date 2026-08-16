@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { listPrograms } from "@/lib/public-content.functions";
+import { programImage, programImageAlt } from "@/lib/program-images";
+import { useT } from "@/lib/i18n/language-provider";
 
 const programsQuery = queryOptions({ queryKey: ["programs"], queryFn: () => listPrograms() });
 
