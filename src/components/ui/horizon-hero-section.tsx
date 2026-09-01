@@ -146,7 +146,7 @@ export const Component = () => {
           time: { value: 0 },
           color1: { value: new THREE.Color(0xffb347) },
           color2: { value: new THREE.Color(0xc9a227) },
-          opacity: { value: 0.3 },
+          opacity: { value: 0.16 },
         },
         vertexShader: `
           varying vec2 vUv;
@@ -319,9 +319,9 @@ export const Component = () => {
     refs.composer.addPass(
       new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.8,
+        0.45,
         0.4,
-        0.85,
+        0.9,
       ),
     );
 
