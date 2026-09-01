@@ -268,12 +268,12 @@ export const Component = () => {
 
       refs.stars.forEach((starField) => {
         const mat = starField.material as THREE.ShaderMaterial;
-        if (mat.uniforms) mat.uniforms.time.value = time;
+        if (mat.uniforms?.['time']) mat.uniforms['time'].value = time;
       });
 
       if (refs.nebula) {
         const mat = refs.nebula.material as THREE.ShaderMaterial;
-        if (mat.uniforms) mat.uniforms.time.value = time * 0.5;
+        if (mat.uniforms?.['time']) mat.uniforms['time'].value = time * 0.5;
       }
 
       if (refs.camera && refs.targetCameraX !== undefined) {
@@ -421,8 +421,8 @@ export const Component = () => {
         { x: 0, y: 40, z: -50 },
         { x: 0, y: 50, z: -700 },
       ];
-      const currentPos = cameraPositions[newSection] || cameraPositions[0];
-      const nextPos = cameraPositions[newSection + 1] || currentPos;
+      const currentPos = cameraPositions[newSection] ?? cameraPositions[0]!;
+      const nextPos = cameraPositions[newSection + 1] ?? currentPos;
 
       refs.targetCameraX = currentPos.x + (nextPos.x - currentPos.x) * sectionProgress;
       refs.targetCameraY = currentPos.y + (nextPos.y - currentPos.y) * sectionProgress;
@@ -430,11 +430,11 @@ export const Component = () => {
 
       refs.mountains.forEach((mountain, i) => {
         const speed = 1 + i * 0.9;
-        const targetZ = (mountain.userData.baseZ as number) + scrollY * speed * 0.5;
+        const targetZ = (mountain.userData['baseZ'] as number) + scrollY * speed * 0.5;
         refs.nebula!.position.z = targetZ + progress * speed * 0.01 - 100;
-        mountain.position.z = progress > 0.7 ? 600000 : refs.locations[i];
+        mountain.position.z = progress > 0.7 ? 600000 : (refs.locations[i] ?? 0);
       });
-      refs.nebula.position.z = refs.mountains[3].position.z;
+      if (refs.mountains[3]) refs.nebula.position.z = refs.mountains[3].position.z;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -474,11 +474,11 @@ export const Component = () => {
           ref={titleRef}
           className="invisible font-display text-6xl leading-none tracking-[0.15em] md:text-[9rem]"
         >
-          {splitTitle(SECTIONS[0].title)}
+          {splitTitle(SECTIONS[0]!.title)}
         </h1>
         <div ref={subtitleRef} className="invisible mt-8 space-y-2 text-white/70">
-          <p className="subtitle-line text-base md:text-lg">{SECTIONS[0].line1}</p>
-          <p className="subtitle-line text-base md:text-lg">{SECTIONS[0].line2}</p>
+          <p className="subtitle-line text-base md:text-lg">{SECTIONS[0]!.line1}</p>
+          <p className="subtitle-line text-base md:text-lg">{SECTIONS[0]!.line2}</p>
         </div>
       </section>
 
