@@ -17,6 +17,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as CoachingRouteImport } from './routes/coaching'
 import { Route as GeneratorRouteImport } from './routes/generator'
 import { Route as HomeGymRouteImport } from './routes/home-gym'
+import { Route as HorizonRouteImport } from './routes/horizon'
 import { Route as MotivationRouteImport } from './routes/motivation'
 import { Route as NutritionRouteImport } from './routes/nutrition'
 import { Route as PlansRouteImport } from './routes/plans'
@@ -66,6 +67,11 @@ const GeneratorRoute = GeneratorRouteImport.update({
 const HomeGymRoute = HomeGymRouteImport.update({
   id: '/home-gym',
   path: '/home-gym',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HorizonRoute = HorizonRouteImport.update({
+  id: '/horizon',
+  path: '/horizon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MotivationRoute = MotivationRouteImport.update({
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/coaching': typeof CoachingRoute
   '/generator': typeof GeneratorRoute
   '/home-gym': typeof HomeGymRoute
+  '/horizon': typeof HorizonRoute
   '/motivation': typeof MotivationRoute
   '/nutrition': typeof NutritionRoute
   '/plans': typeof PlansRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/coaching': typeof CoachingRoute
   '/generator': typeof GeneratorRoute
   '/home-gym': typeof HomeGymRoute
+  '/horizon': typeof HorizonRoute
   '/motivation': typeof MotivationRoute
   '/nutrition': typeof NutritionRoute
   '/plans': typeof PlansRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/coaching': typeof CoachingRoute
   '/generator': typeof GeneratorRoute
   '/home-gym': typeof HomeGymRoute
+  '/horizon': typeof HorizonRoute
   '/motivation': typeof MotivationRoute
   '/nutrition': typeof NutritionRoute
   '/plans': typeof PlansRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/coaching'
     | '/generator'
     | '/home-gym'
+    | '/horizon'
     | '/motivation'
     | '/nutrition'
     | '/plans'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/coaching'
     | '/generator'
     | '/home-gym'
+    | '/horizon'
     | '/motivation'
     | '/nutrition'
     | '/plans'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/coaching'
     | '/generator'
     | '/home-gym'
+    | '/horizon'
     | '/motivation'
     | '/nutrition'
     | '/plans'
@@ -259,6 +271,7 @@ export interface RootRouteChildren {
   CoachingRoute: typeof CoachingRoute
   GeneratorRoute: typeof GeneratorRoute
   HomeGymRoute: typeof HomeGymRoute
+  HorizonRoute: typeof HorizonRoute
   MotivationRoute: typeof MotivationRoute
   NutritionRoute: typeof NutritionRoute
   PlansRoute: typeof PlansRoute
@@ -326,6 +339,13 @@ declare module '@tanstack/react-router' {
       path: '/home-gym'
       fullPath: '/home-gym'
       preLoaderRoute: typeof HomeGymRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/horizon': {
+      id: '/horizon'
+      path: '/horizon'
+      fullPath: '/horizon'
+      preLoaderRoute: typeof HorizonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/motivation': {
@@ -430,6 +450,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachingRoute: CoachingRoute,
   GeneratorRoute: GeneratorRoute,
   HomeGymRoute: HomeGymRoute,
+  HorizonRoute: HorizonRoute,
   MotivationRoute: MotivationRoute,
   NutritionRoute: NutritionRoute,
   PlansRoute: PlansRoute,
